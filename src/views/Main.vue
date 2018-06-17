@@ -1,0 +1,39 @@
+<template>
+  <div class="main">
+    <br>
+    <v-flex xs6 offset-xs3>
+      <search-bar @addCityWeather="addCityWeather"/>
+      <city-list :cities="citiesWeather" @deleteEntry="deleteEntry"></city-list>
+    </v-flex>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import SearchBar from '@/components/search-bar/search-bar.component.vue'; // @ is an alias to /src
+import CityList from '@/components/city-list/city-list.component.vue';
+import { mapState, mapActions, mapMutations } from 'vuex';
+
+@Component({
+  components: {
+    SearchBar,
+    CityList
+  },
+  computed: {
+    ...mapState(['citiesWeather']),
+  },
+  methods: {
+    ...mapActions(['getCityInfo']),
+    ...mapMutations(['deleteCity'])
+  }
+})
+export default class Main extends Vue {
+  addCityWeather(city) {
+    this['getCityInfo'](city);
+  }
+
+  deleteEntry(city) {
+    this['deleteCity'](city);
+  }
+}
+</script>
