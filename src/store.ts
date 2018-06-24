@@ -25,11 +25,17 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async getCityInfo(context, city) {
-      const response = await weatherInfoService.getWeatherInfo(city);
-      console.log('city', response);
-      
-      context.commit('addCityWeather', response)
+    getCityInfo(context, city) {
+      const response = weatherInfoService.getWeatherInfo(city)
+      .then(res => res.json())
+      .then(city => context.commit('addCityWeather', {
+        id: city.id,
+        name: city.name,
+        temp: city.main.temp
+      }))
+      .catch(() => 'An error occurred');
+
+      return response;
     }
   },
 });

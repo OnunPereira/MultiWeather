@@ -2,7 +2,7 @@
   <div class="main">
     <br>
     <v-flex xs6 offset-xs3>
-      <search-bar @addCityWeather="addCityWeather"/>
+      <search-bar :errorMessages="errorMessages" @addCityWeather="addCityWeather"/>
       <city-list :cities="citiesWeather" @deleteEntry="deleteEntry"></city-list>
     </v-flex>
   </div>
@@ -28,8 +28,15 @@ import { mapState, mapActions, mapMutations } from 'vuex';
   }
 })
 export default class Main extends Vue {
-  addCityWeather(city) {
-    this['getCityInfo'](city);
+  errorMessages: string;
+
+  constructor() {
+    super();
+    this.errorMessages = null;
+  }
+
+  async addCityWeather(city) {
+    this.errorMessages = await this['getCityInfo'](city);
   }
 
   deleteEntry(city) {
@@ -37,3 +44,6 @@ export default class Main extends Vue {
   }
 }
 </script>
+
+<style scoped>
+</style>

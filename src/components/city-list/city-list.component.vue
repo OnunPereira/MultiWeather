@@ -1,18 +1,20 @@
 <template>
   <v-layout row wrap>
-    <v-list v-for="city in cities" :key="city.id">
-      <v-card>
-        <v-card-text>
-          {{ tempInCelsius(city.temp) }} °C
-        </v-card-text>
+    <v-flex v-for="city in cities" :key="city.id" xs6>
+      <v-card light hover class="card" color="grey lighten-2">
         <v-card-title primary-title>
-          {{ city.name }}
+          <div>
+            <h4 class="headline mb-0">{{ city.name }}</h4>
+          </div>
         </v-card-title>
+        <v-card-text>
+          <h2>{{ tempInCelsius(city.temp) }}</h2>
+        </v-card-text>
         <v-card-actions>
           <v-btn flat small color="orange" @click="deleteEntry(city)">Delete</v-btn>
         </v-card-actions>
       </v-card>
-    </v-list>
+    </v-flex>
   </v-layout>
 </template>
 
@@ -25,7 +27,7 @@ import CityWeatherModel from '@/models/city-weather.model';
   name: 'city-list',
   methods: {
     tempInCelsius(tempInK) {
-      return Math.round(tempInK - 273.15);
+      return Math.round(tempInK - 273.15) + ' °C';
     }
   }
 })
@@ -37,3 +39,9 @@ export default class CityList extends Vue {
   }
 }
 </script>
+
+<style>
+.card {
+  margin: 3%;
+}
+</style>

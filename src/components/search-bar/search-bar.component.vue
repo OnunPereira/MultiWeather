@@ -1,7 +1,7 @@
 <template>
   <v-form>
-    <v-text-field v-model="city" label="Insert city name"></v-text-field>
-    <v-btn round color="primary" light @click="addCityWeather">Send</v-btn>
+    <v-text-field :error-messages="errorMessages" v-model="city" label="What's the weather in..." color="white" prepend-icon="wb_sunny"></v-text-field>
+    <v-btn round color="orange" dark @click="addCityWeather">Send</v-btn>
   </v-form>
 </template>
 
@@ -13,7 +13,8 @@ import { Component, Prop } from 'vue-property-decorator';
   name: 'search-bar'
 })
 export default class SearchBar extends Vue {
-  city : string;
+  @Prop() errorMessages: string;
+  city: string;
 
   constructor() {
     super();
