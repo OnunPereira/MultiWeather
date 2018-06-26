@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap>
-    <v-flex v-for="city in cities" :key="city.id" xs6>
+    <v-flex v-for="city in cities" :key="city.id" xs12>
       <v-card light hover class="card" color="grey lighten-2">
         <v-card-title primary-title>
           <div>
@@ -8,7 +8,7 @@
           </div>
         </v-card-title>
         <v-card-text>
-          <h2>{{ tempInCelsius(city.temp) }}</h2>
+          <temperature-chart :city="city"></temperature-chart>
         </v-card-text>
         <v-card-actions>
           <v-btn flat small color="orange" @click="deleteEntry(city)">Delete</v-btn>
@@ -19,23 +19,22 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { Component, Prop } from 'vue-property-decorator';
-import CityWeatherModel from '@/models/city-weather.model';
+import Vue from "vue";
+import { Component, Prop } from "vue-property-decorator";
+import CityWeatherModel from "@/models/city-weather.model";
+import TemperatureChart from "../temperature-chart/temperature-chart.component.vue";
 
 @Component({
-  name: 'city-list',
-  methods: {
-    tempInCelsius(tempInK) {
-      return Math.round(tempInK - 273.15) + ' °C';
-    }
+  name: "city-list",
+  components: {
+    TemperatureChart
   }
 })
 export default class CityList extends Vue {
   @Prop() cities: CityWeatherModel[];
-  
+
   deleteEntry(city) {
-    this.$emit('deleteEntry', city);
+    this.$emit("deleteEntry", city);
   }
 }
 </script>

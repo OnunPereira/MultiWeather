@@ -9,10 +9,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import SearchBar from '@/components/search-bar/search-bar.component.vue'; // @ is an alias to /src
-import CityList from '@/components/city-list/city-list.component.vue';
-import { mapState, mapActions, mapMutations } from 'vuex';
+import { Component, Vue } from "vue-property-decorator";
+import SearchBar from "@/components/search-bar/search-bar.component.vue"; // @ is an alias to /src
+import CityList from "@/components/city-list/city-list.component.vue";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 @Component({
   components: {
@@ -20,11 +20,11 @@ import { mapState, mapActions, mapMutations } from 'vuex';
     CityList
   },
   computed: {
-    ...mapState(['citiesWeather']),
+    ...mapState(["citiesWeather"])
   },
   methods: {
-    ...mapActions(['getCityInfo']),
-    ...mapMutations(['deleteCity'])
+    ...mapActions(["getCityInfo"]),
+    ...mapMutations(["deleteCity"])
   }
 })
 export default class Main extends Vue {
@@ -36,11 +36,15 @@ export default class Main extends Vue {
   }
 
   async addCityWeather(city) {
-    this.errorMessages = await this['getCityInfo'](city);
+    try {
+      const response = await this["getCityInfo"](city);
+    } catch (error) {
+      this.errorMessages = error;
+    }
   }
 
   deleteEntry(city) {
-    this['deleteCity'](city);
+    this["deleteCity"](city);
   }
 }
 </script>

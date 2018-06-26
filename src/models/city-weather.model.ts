@@ -1,5 +1,10 @@
 export default interface CityWeatherModel {
   id: number;
-  temp: any;
+  list: WeatherData[];
   name: string;
+}
+
+interface WeatherData {
+  x: number;
+  y: number;
 }
