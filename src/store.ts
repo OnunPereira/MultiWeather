@@ -1,16 +1,18 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import IState from "@/models/state.model";
-import weatherInfoService from "@/services/weather-info.service";
-import CityWeatherModel from "@/models/city-weather.model";
-import moment from "moment";
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+import moment from 'moment';
+import { concat } from 'lodash';
+
+import weatherInfoService from './services/weather-info.service';
+import CityWeatherModel from './models/city-weather.model';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     citiesWeather: []
-  } as IState,
+  },
   mutations: {
     addCityWeather(state, payload: CityWeatherModel) {
       const index = state.citiesWeather.findIndex(
@@ -20,7 +22,7 @@ export default new Vuex.Store({
       if (index !== -1) {
         state.citiesWeather[index] = payload;
       } else {
-        state.citiesWeather.push(payload);
+        state.citiesWeather = concat([payload], state.citiesWeather);
       }
     },
     deleteCity(state, payload) {
@@ -30,25 +32,23 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    getCityInfo(context, city) {
-      const response = weatherInfoService
-        .getWeatherInfo(city)
-        .then(res => res.json())
-        .then(city => ({
-          id: city.city.id,
-          name: city.city.name,
-          list: city.list.map(listItem => ({
-            x: moment(listItem.dt * 1000).format("DD/MM HH:mm"),
+    async getCityInfo(context, city) {
+      const res = await weatherInfoService.getWeatherInfo(city);
+
+      if (res.cod === '200') {
+        const response = {
+          id: res.city.id,
+          name: res.city.name,
+          list: res.list.map(listItem => ({
+            x: moment(listItem.dt * 1000).format('DD/MM HH:mm'),
             y: tempInCelsius(listItem.main.temp)
           }))
-        }))
-        .catch((err) => {
-          throw err;
-        });
+        };
 
-      context.commit('addCityWeather', response);
-
-      return response;
+        context.commit('addCityWeather', response);
+      } else {
+        throw res;
+      }
     }
   }
 });

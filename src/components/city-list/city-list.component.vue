@@ -11,6 +11,7 @@
           <temperature-chart :city="city"></temperature-chart>
         </v-card-text>
         <v-card-actions>
+          <v-spacer></v-spacer>
           <v-btn flat small color="orange" @click="deleteEntry(city)">Delete</v-btn>
         </v-card-actions>
       </v-card>
@@ -19,13 +20,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
-import CityWeatherModel from "@/models/city-weather.model";
-import TemperatureChart from "../temperature-chart/temperature-chart.component.vue";
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import CityWeatherModel from '@/models/city-weather.model';
+import TemperatureChart from '../temperature-chart/temperature-chart.component.vue';
 
 @Component({
-  name: "city-list",
+  name: 'city-list',
   components: {
     TemperatureChart
   }
@@ -34,7 +35,7 @@ export default class CityList extends Vue {
   @Prop() cities: CityWeatherModel[];
 
   deleteEntry(city) {
-    this.$emit("deleteEntry", city);
+    this.$emit('deleteEntry', city);
   }
 }
 </script>
