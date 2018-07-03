@@ -1,7 +1,8 @@
 export default interface CityWeatherModel {
   id: number;
-  list: WeatherData[];
   name: string;
+  currentWeather: string;
+  forecast: WeatherData[];
 }
 
 interface WeatherData {

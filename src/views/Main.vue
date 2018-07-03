@@ -2,8 +2,8 @@
   <div class="main">
     <br>
     <v-flex xs6 offset-xs3>
-      <search-bar :errorMessages="errorMessages" @addCityWeather="addCityWeather" :searchTerm="null"/>
-      <city-list :cities="citiesWeather" @deleteEntry="deleteEntry"></city-list>
+      <search-bar :errorMessages="errorMessages" @addCity="addCity" />
+      <city-list :cities="citiesWeather" :selected="citiesWeather[0]" @deleteEntry="deleteEntry"></city-list>
     </v-flex>
   </div>
 </template>
@@ -17,6 +17,7 @@ import { capitalize } from 'lodash';
 
 import SearchBar from '../components/search-bar/search-bar.component.vue';
 import CityList from '../components/city-list/city-list.component.vue';
+import { ACTIONS, MUTATIONS } from '@/constants';
 
 @Component({
   components: {
@@ -27,8 +28,8 @@ import CityList from '../components/city-list/city-list.component.vue';
     ...mapState(['citiesWeather'])
   },
   methods: {
-    ...mapActions(['getCityInfo']),
-    ...mapMutations(['deleteCity'])
+    ...mapActions([ACTIONS.GET_CITY]),
+    ...mapMutations([MUTATIONS.DELETE_CITY])
   }
 })
 export default class Main extends Vue {
@@ -39,17 +40,17 @@ export default class Main extends Vue {
     this.errorMessages = null;
   }
 
-  async addCityWeather(city) {
+  async addCity(city) {
     this.errorMessages = null;
     try {
-      await this['getCityInfo'](city);
+      await this[ACTIONS.GET_CITY](city);
     } catch (error) {
       this.errorMessages = capitalize(error.message);
     }
   }
 
   deleteEntry(city) {
-    this['deleteCity'](city);
+    this[MUTATIONS.DELETE_CITY](city);
   }
 }
 </script>

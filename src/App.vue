@@ -6,7 +6,7 @@
 
 <style>
 html {
-  background-color: #5ad;
+  background-color: #5bf;
 }
 
 #app {
@@ -27,5 +27,9 @@ html {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+h3 {
+  font-weight: 100;
 }
 </style>

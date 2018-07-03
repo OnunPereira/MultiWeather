@@ -5,22 +5,22 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import CityWeatherModel from '@/models/city-weather.model';
+
 import Chart from 'chart.js';
+
+import CityWeatherModel from '../../models/city-weather.model';
 
 @Component({
   name: 'temperature-chart'
 })
 export default class TemperatureChartComponent extends Vue {
   @Prop() city: CityWeatherModel;
-  context: CanvasRenderingContext2D;
-  chart: any;
 
   mounted() {
-    this.context = (document.getElementById(
+    const context = (document.getElementById(
       this.city.name
     ) as HTMLCanvasElement).getContext('2d');
-    this.chart = new Chart(this.context, {
+    const chart = new Chart(context, {
       type: 'line',
       data: {
         labels: this.city.list.map(item => item.x),
@@ -39,7 +39,7 @@ export default class TemperatureChartComponent extends Vue {
           yAxes: [
             {
               ticks: {
-                beginAtZero: true
+                beginAtZero: false
               }
             }
           ]
