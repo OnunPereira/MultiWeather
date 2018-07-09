@@ -23,11 +23,11 @@ export default class TemperatureChartComponent extends Vue {
     const chart = new Chart(context, {
       type: 'line',
       data: {
-        labels: this.city.list.map(item => item.x),
+        labels: this.city.forecast.map(item => item.x),
         datasets: [
           {
             label: 'Temperature in °C',
-            data: this.city.list.map(item => item.y),
+            data: this.city.forecast.map(item => item.y),
             backgroundColor: 'rgba(255, 149, 102, 0.2)',
             borderColor: 'rgba(255,149,102,1)',
             borderWidth: 1

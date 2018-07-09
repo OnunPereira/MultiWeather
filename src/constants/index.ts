@@ -1,8 +1,9 @@
 export const ACTIONS = {
-  GET_CITY: 'getCityInfo'
+  GET_WEATHER: 'getWeatherAction',
+  GET_FORECAST: 'getForecastAction'
 };
 
 export const MUTATIONS = {
-  ADD_CITY: 'addCity',
-  DELETE_CITY: 'deleteCity'
+  ADD_CITY: 'addCityMutation',
+  DELETE_CITY: 'deleteCityMutation'
 };

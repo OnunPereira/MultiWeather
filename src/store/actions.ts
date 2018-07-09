@@ -4,29 +4,30 @@ import weatherInfoService from '../services/weather-info.service';
 import { ACTIONS } from '@/constants';
 
 export default {
-  async [ACTIONS.GET_CITY](context, city) {
-    const forecast = await weatherInfoService.getForecast(city);
-    const weather = await weatherInfoService.getWeather(city);
+  async [ACTIONS.GET_WEATHER](context, city) {
+    const response = await weatherInfoService.getWeather(city);
 
-    if (weather.cod === '200') {
-      const response = {
-        id: weather.
-      }
+    if (response.cod == '200') {
+      return tempInCelsius(response.main.temp) + ' °C';
+    } else {
+      throw response;
     }
+  },
 
-    if (forecast.cod === '200') {
-      const response = {
-        id: forecast.city.id,
-        name: forecast.city.name,
-        list: forecast.list.map(listItem => ({
+  async [ACTIONS.GET_FORECAST](context, city) {
+    const response = await weatherInfoService.getForecast(city);
+
+    if (response.cod == '200') {
+      return {
+        id: response.city.id,
+        name: response.city.name,
+        forecast: response.list.map(listItem => ({
           x: moment(listItem.dt * 1000).format('DD/MM HH:mm'),
           y: tempInCelsius(listItem.main.temp)
         }))
       };
-
-      context.commit('addCity', response);
     } else {
-      throw forecast;
+      throw response;
     }
   }
 };

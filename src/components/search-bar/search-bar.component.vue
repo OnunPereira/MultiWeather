@@ -1,7 +1,7 @@
 <template>
   <v-form @submit="addCity()">
     <v-text-field :error-messages="errorMessages" label="What's the weather forecast for..." v-model="searchTerm" prepend-icon="wb_sunny"></v-text-field>
-    <v-btn round color="amber" type="submit">Search city</v-btn>
+    <v-btn round color="amber darken-1" type="submit">Search city</v-btn>
   </v-form>
 </template>
 

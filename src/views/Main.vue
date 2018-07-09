@@ -3,7 +3,7 @@
     <br>
     <v-flex xs6 offset-xs3>
       <search-bar :errorMessages="errorMessages" @addCity="addCity" />
-      <city-list :cities="citiesWeather" :selected="citiesWeather[0]" @deleteEntry="deleteEntry"></city-list>
+      <city-list :cities="citiesWeather" :selected="citiesWeather[0]" @deleteEntry="deleteEntry" />
     </v-flex>
   </div>
 </template>
@@ -18,6 +18,7 @@ import { capitalize } from 'lodash';
 import SearchBar from '../components/search-bar/search-bar.component.vue';
 import CityList from '../components/city-list/city-list.component.vue';
 import { ACTIONS, MUTATIONS } from '@/constants';
+import CityWeatherModel from '@/models/city-weather.model';
 
 @Component({
   components: {
@@ -28,8 +29,14 @@ import { ACTIONS, MUTATIONS } from '@/constants';
     ...mapState(['citiesWeather'])
   },
   methods: {
-    ...mapActions([ACTIONS.GET_CITY]),
-    ...mapMutations([MUTATIONS.DELETE_CITY])
+    ...mapActions({
+      [ACTIONS.GET_WEATHER]: ACTIONS.GET_WEATHER,
+      [ACTIONS.GET_FORECAST]: ACTIONS.GET_FORECAST
+    }),
+    ...mapMutations({
+      [MUTATIONS.ADD_CITY]: MUTATIONS.ADD_CITY,
+      [MUTATIONS.DELETE_CITY]: MUTATIONS.DELETE_CITY
+    })
   }
 })
 export default class Main extends Vue {
@@ -42,8 +49,19 @@ export default class Main extends Vue {
 
   async addCity(city) {
     this.errorMessages = null;
+
     try {
-      await this[ACTIONS.GET_CITY](city);
+      const currentWeather = await this[ACTIONS.GET_WEATHER](city);
+      const { id, name, forecast } = await this[ACTIONS.GET_FORECAST](city);
+
+      this[MUTATIONS.ADD_CITY](
+        new CityWeatherModel({
+          id,
+          name,
+          forecast,
+          currentWeather
+        })
+      );
     } catch (error) {
       this.errorMessages = capitalize(error.message);
     }

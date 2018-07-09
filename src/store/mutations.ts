@@ -13,6 +13,7 @@ export default {
       state.citiesWeather = concat(state.citiesWeather, [payload]);
     }
   },
+
   [MUTATIONS.DELETE_CITY](state, payload) {
     state.citiesWeather = state.citiesWeather.filter(
       city => city.id !== payload.id
