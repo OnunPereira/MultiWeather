@@ -8,7 +8,11 @@ export default {
     const response = await weatherInfoService.getWeather(city);
 
     if (response.cod == '200') {
-      return tempInCelsius(response.main.temp) + ' °C';
+      return {
+        temp: response.main.temp,
+        humidity: response.main.humidity,
+        pressure: response.main.pressure
+      };
     } else {
       throw response;
     }
@@ -23,7 +27,7 @@ export default {
         name: response.city.name,
         forecast: response.list.map(listItem => ({
           x: moment(listItem.dt * 1000).format('DD/MM HH:mm'),
-          y: tempInCelsius(listItem.main.temp)
+          y: listItem.main.temp
         }))
       };
     } else {
@@ -31,7 +35,3 @@ export default {
     }
   }
 };
-
-function tempInCelsius(tempInK) {
-  return Math.round(tempInK - 273.15);
-}

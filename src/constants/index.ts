@@ -1,9 +1,11 @@
 export const ACTIONS = {
-  GET_WEATHER: 'getWeatherAction',
-  GET_FORECAST: 'getForecastAction'
+  GET_FORECAST: Symbol['getForecastAction'],
+  GET_WEATHER: Symbol['getWeatherAction']
 };
 
 export const MUTATIONS = {
-  ADD_CITY: 'addCityMutation',
-  DELETE_CITY: 'deleteCityMutation'
+  ADD_CITY: Symbol['addCityMutation'],
+  DELETE_CITY: Symbol['deleteCityMutation'],
+  SET_CURRENT_CITY: Symbol['setCurrentCityMutation'],
+  UPDATE_CITY: Symbol['updateCityMutation']
 };

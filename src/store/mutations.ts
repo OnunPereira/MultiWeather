@@ -14,9 +14,22 @@ export default {
     }
   },
 
+  [MUTATIONS.UPDATE_CITY](
+    state,
+    payload: { id: string, cityWeather: CityWeatherModel }
+  ) {
+    const index = state.citiesWeather.findIndex(city => city.id === payload.id);
+
+    state.citiesWeather[index] = payload.cityWeather;
+  },
+
   [MUTATIONS.DELETE_CITY](state, payload) {
     state.citiesWeather = state.citiesWeather.filter(
       city => city.id !== payload.id
     );
+  },
+
+  [MUTATIONS.SET_CURRENT_CITY](state, payload: string) {
+    state.currentCity = payload;
   }
 };
