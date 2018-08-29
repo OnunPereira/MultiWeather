@@ -47,7 +47,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { capitalize } from 'lodash';
 
 import CityWeatherModel from '../models/city-weather.model';
-import TemperatureChart from '../temperature-chart/temperature-chart.component.vue';
+import TemperatureChart from './temperature-chart.component.vue';
 
 @Component({
   name: 'city-list',
