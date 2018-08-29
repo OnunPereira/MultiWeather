@@ -2,20 +2,19 @@
   <v-app :dark="dark">
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
-        <!-- TODO: meter search bar floating numa toolbar -->
         <v-flex xs10 md8 lg6 offset-xs1 offset-md2 offset-lg3 my-5>
           <search-bar :errorMessages="errorMessages" @addCity="addCity" />
         </v-flex>
         <v-flex xs1>
-          <v-menu transition="slide-x-reverse-transition" offset-y>
+          <v-menu transition="slide-x-reverse-transition" offset-y :close-on-content-click="false">
             <v-btn icon slot="activator">
               <v-icon>more_vert</v-icon>
             </v-btn>
             <v-list>
               <v-list-tile v-for="item in items" :key="item.key">
-                <v-list-tile-title>
+                <v-list-tile-action>
                   <v-switch label="Dark theme" v-model="dark"></v-switch>
-                </v-list-tile-title>
+                </v-list-tile-action>
               </v-list-tile>
             </v-list>
           </v-menu>
@@ -31,9 +30,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapState, mapActions, mapMutations } from 'vuex';
-import { Component } from 'vue-property-decorator';
+import { Component, Watch, Prop } from 'vue-property-decorator';
+import { State, Action, Mutation, namespace } from 'vuex-class';
 
-import { capitalize } from 'lodash';
+import capitalize from 'lodash/capitalize';
 
 import { SearchBar, CityList } from '../components';
 import { ACTIONS, MUTATIONS } from '@/constants';
@@ -43,26 +43,21 @@ import CityWeatherModel from '@/models/city-weather.model';
   components: {
     SearchBar,
     CityList
-  },
-  computed: {
-    ...mapState(['citiesWeather', 'currentCity'])
-  },
-  methods: {
-    ...mapActions({
-      [ACTIONS.GET_WEATHER]: ACTIONS.GET_WEATHER,
-      [ACTIONS.GET_FORECAST]: ACTIONS.GET_FORECAST
-    }),
-    ...mapMutations({
-      [MUTATIONS.ADD_CITY]: MUTATIONS.ADD_CITY,
-      [MUTATIONS.UPDATE_CITY]: MUTATIONS.UPDATE_CITY,
-      [MUTATIONS.DELETE_CITY]: MUTATIONS.DELETE_CITY,
-      [MUTATIONS.SET_CURRENT_CITY]: MUTATIONS.SET_CURRENT_CITY
-    })
   }
 })
 export default class Main extends Vue {
+  @State(state => state.citiesWeather)
   citiesWeather: CityWeatherModel[];
+  @State(state => state.currentCity)
   currentCity: CityWeatherModel;
+
+  @Action(ACTIONS.GET_WEATHER) getWeatherAction;
+  @Action(ACTIONS.GET_FORECAST) getForecastAction;
+
+  @Mutation(MUTATIONS.ADD_CITY) addCityMutation;
+  @Mutation(MUTATIONS.UPDATE_CITY) updateCityMutation;
+  @Mutation(MUTATIONS.DELETE_CITY) deleteCityMutation;
+  @Mutation(MUTATIONS.SET_CURRENT_CITY) setCurrentCityMutation;
 
   private dark: boolean;
   private errorMessages: string;
@@ -79,14 +74,33 @@ export default class Main extends Vue {
     ];
   }
 
+  async mounted() {
+    if (localStorage.getItem('darkTheme')) {
+      try {
+        this.dark = localStorage.getItem('darkTheme') === 'true';
+      } catch (error) {
+        localStorage.removeItem('darkTheme');
+      }
+    }
+
+    if (localStorage.getItem('cities')) {
+      try {
+        const cities = JSON.parse(localStorage.getItem('cities'));
+
+        cities.forEach(city => this.addCityMutation(new CityWeatherModel(city)));
+        this.setCurrentCityMutation(cities[0].name);
+      } catch (e) {
+        console.log('hehehe', e);
+      }
+    }
+  }
+
   async addCity(cityName: string) {
     this.errorMessages = null;
 
     try {
-      const { id, name, forecast } = await this[ACTIONS.GET_FORECAST](cityName);
-      const { temp, humidity, pressure } = await this[ACTIONS.GET_WEATHER](
-        cityName
-      );
+      const { id, name, forecast } = await this.getForecastAction(cityName);
+      const { temp, humidity, pressure } = await this.getWeatherAction(cityName);
 
       const newCity = new CityWeatherModel({
         id,
@@ -97,24 +111,22 @@ export default class Main extends Vue {
         pressure
       });
 
-      this[MUTATIONS.ADD_CITY](newCity);
-      this[MUTATIONS.SET_CURRENT_CITY](newCity.name);
+      this.addCityMutation(newCity);
+      this.setCurrentCityMutation(newCity.name);
     } catch (error) {
       this.errorMessages = capitalize(error.message);
     }
   }
 
   async updateCity(cityName: string) {
-    this[MUTATIONS.SET_CURRENT_CITY](cityName);
+    this.setCurrentCityMutation(cityName);
 
     try {
-      const { id, name, forecast } = await this[ACTIONS.GET_FORECAST](cityName);
-      const { temp, humidity, pressure } = await this[ACTIONS.GET_WEATHER](
-        cityName
-      );
+      const { id, name, forecast } = await this.getForecastAction(cityName);
+      const { temp, humidity, pressure } = await this.getWeatherAction(cityName);
 
-      this[MUTATIONS.UPDATE_CITY]({
-        id: id,
+      this.updateCityMutation({
+        id,
         cityWeather: new CityWeatherModel({
           id,
           name,
@@ -125,17 +137,20 @@ export default class Main extends Vue {
         })
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 
   deleteCity(city: CityWeatherModel) {
-    this[MUTATIONS.DELETE_CITY](city);
-    this[MUTATIONS.SET_CURRENT_CITY](
-      this.citiesWeather[this.citiesWeather.length - 1]
-        ? this.citiesWeather[this.citiesWeather.length - 1].name
-        : ''
+    this.deleteCityMutation(city);
+    this.setCurrentCityMutation(
+      this.citiesWeather[this.citiesWeather.length - 1] ? this.citiesWeather[this.citiesWeather.length - 1].name : ''
     );
+  }
+
+  @Watch('dark')
+  storeDarkTheme(value) {
+    localStorage.setItem('darkTheme', value + '');
   }
 }
 </script>

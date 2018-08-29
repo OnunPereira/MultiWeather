@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 
 import actions from './actions';
 import mutations from './mutations';
-import CityWeatherModel from '@/models/city-weather.model';
 
 Vue.use(Vuex);
 

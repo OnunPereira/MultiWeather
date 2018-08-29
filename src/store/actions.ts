@@ -1,7 +1,9 @@
 import moment from 'moment';
 
-import weatherInfoService from '../services/weather-info.service';
+import WeatherInfoService from '../services/weather-info.service';
 import { ACTIONS } from '@/constants';
+
+const weatherInfoService = new WeatherInfoService();
 
 export default {
   async [ACTIONS.GET_WEATHER](context, city) {

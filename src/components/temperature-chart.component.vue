@@ -8,7 +8,7 @@ import { Component, Prop } from 'vue-property-decorator';
 
 import Chart from 'chart.js';
 
-import CityWeatherModel from '../../models/city-weather.model';
+import CityWeatherModel from '../models/city-weather.model';
 
 @Component({
   name: 'temperature-chart'
@@ -17,9 +17,7 @@ export default class TemperatureChartComponent extends Vue {
   @Prop() city: CityWeatherModel;
 
   mounted() {
-    const context = (document.querySelector(
-      `#c-${this.city.id}`
-    ) as HTMLCanvasElement).getContext('2d');
+    const context = (document.querySelector(`#c-${this.city.id}`) as HTMLCanvasElement).getContext('2d');
 
     const chart = new Chart(context, {
       type: 'line',

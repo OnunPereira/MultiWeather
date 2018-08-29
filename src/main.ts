@@ -5,11 +5,12 @@ import store from './store/index';
 import Vuetify from 'vuetify';
 import colors from 'vuetify/es5/util/colors';
 import WeatherPlugin from './plugins/weather-plugin';
-
 import 'vuetify/dist/vuetify.min.css';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
 
 Vue.config.productionTip = false;
 Vue.use(Vuetify, {
+  iconfont: 'mdi',
   theme: {
     primary: colors.orange.base,
     secondary: colors.orange.lighten2,

@@ -1,12 +1,17 @@
-const API_KEY = 'bca6b125edd12da75d20e22c3f0c0a1a';
+import { HttpService } from '../models';
 
-export default {
+export default class WeatherInfoService extends HttpService {
   getForecast(city: string) {
-    const ENDPOINT = `https://api.openweathermap.org/data/2.5/forecast?q=${city},pt&APPID=${API_KEY}&units=metric`;
-    return fetch(ENDPOINT).then(res => res.json());
-  },
-  getWeather(city: string) {
-    const ENDPOINT = `https://api.openweathermap.org/data/2.5/weather?q=${city},pt&APPID=${API_KEY}&units=metric`;
-    return fetch(ENDPOINT).then(res => res.json());
+    const ENDPOINT = `https://api.openweathermap.org/data/2.5/forecast?q=${city},pt&APPID=${
+      process.env.VUE_APP_API_KEY
+    }&units=metric`;
+    return this.get(ENDPOINT);
   }
-};
+
+  getWeather(city: string) {
+    const ENDPOINT = `https://api.openweathermap.org/data/2.5/weather?q=${city},pt&APPID=${
+      process.env.VUE_APP_API_KEY
+    }&units=metric`;
+    return this.get(ENDPOINT);
+  }
+}

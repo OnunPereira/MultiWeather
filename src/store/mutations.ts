@@ -11,6 +11,7 @@ export default {
       state.citiesWeather[index] = payload;
     } else {
       state.citiesWeather = concat(state.citiesWeather, [payload]);
+      localStorage.setItem('cities', JSON.stringify(state.citiesWeather));
     }
   },
 
@@ -27,6 +28,7 @@ export default {
     state.citiesWeather = state.citiesWeather.filter(
       city => city.id !== payload.id
     );
+    localStorage.setItem('cities', JSON.stringify(state.citiesWeather));
   },
 
   [MUTATIONS.SET_CURRENT_CITY](state, payload: string) {
