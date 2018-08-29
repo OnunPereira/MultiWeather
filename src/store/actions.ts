@@ -9,7 +9,7 @@ export default {
   async [ACTIONS.GET_WEATHER](context, city) {
     const response = await weatherInfoService.getWeather(city);
 
-    if (response.cod == '200') {
+    if (response.cod === 200) {
       return {
         temp: response.main.temp,
         humidity: response.main.humidity,
@@ -23,7 +23,7 @@ export default {
   async [ACTIONS.GET_FORECAST](context, city) {
     const response = await weatherInfoService.getForecast(city);
 
-    if (response.cod == '200') {
+    if (response.cod === '200') {
       return {
         id: response.city.id,
         name: response.city.name,

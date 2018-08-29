@@ -78,7 +78,7 @@ export default class Main extends Vue {
     if (localStorage.getItem('darkTheme')) {
       try {
         this.dark = localStorage.getItem('darkTheme') === 'true';
-      } catch (error) {
+      } catch (e) {
         localStorage.removeItem('darkTheme');
       }
     }
@@ -87,10 +87,12 @@ export default class Main extends Vue {
       try {
         const cities = JSON.parse(localStorage.getItem('cities'));
 
-        cities.forEach(city => this.addCityMutation(new CityWeatherModel(city)));
+        cities.forEach(city =>
+          this.addCityMutation(new CityWeatherModel(city))
+        );
         this.setCurrentCityMutation(cities[0].name);
       } catch (e) {
-        console.log('hehehe', e);
+        localStorage.removeItem('cities');
       }
     }
   }
@@ -100,7 +102,9 @@ export default class Main extends Vue {
 
     try {
       const { id, name, forecast } = await this.getForecastAction(cityName);
-      const { temp, humidity, pressure } = await this.getWeatherAction(cityName);
+      const { temp, humidity, pressure } = await this.getWeatherAction(
+        cityName
+      );
 
       const newCity = new CityWeatherModel({
         id,
@@ -113,8 +117,8 @@ export default class Main extends Vue {
 
       this.addCityMutation(newCity);
       this.setCurrentCityMutation(newCity.name);
-    } catch (error) {
-      this.errorMessages = capitalize(error.message);
+    } catch (e) {
+      this.errorMessages = capitalize(e.message);
     }
   }
 
@@ -123,7 +127,9 @@ export default class Main extends Vue {
 
     try {
       const { id, name, forecast } = await this.getForecastAction(cityName);
-      const { temp, humidity, pressure } = await this.getWeatherAction(cityName);
+      const { temp, humidity, pressure } = await this.getWeatherAction(
+        cityName
+      );
 
       this.updateCityMutation({
         id,
@@ -136,15 +142,17 @@ export default class Main extends Vue {
           pressure
         })
       });
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.log(e);
     }
   }
 
   deleteCity(city: CityWeatherModel) {
     this.deleteCityMutation(city);
     this.setCurrentCityMutation(
-      this.citiesWeather[this.citiesWeather.length - 1] ? this.citiesWeather[this.citiesWeather.length - 1].name : ''
+      this.citiesWeather[this.citiesWeather.length - 1]
+        ? this.citiesWeather[this.citiesWeather.length - 1].name
+        : ''
     );
   }
 
