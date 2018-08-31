@@ -2,22 +2,28 @@
   <v-app :dark="dark">
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
-        <v-flex xs10 md8 lg6 offset-xs1 offset-md2 offset-lg3 my-5>
-          <search-bar :errorMessages="errorMessages" @addCity="addCity" />
-        </v-flex>
-        <v-flex xs1>
-          <v-menu transition="slide-x-reverse-transition" offset-y :close-on-content-click="false">
-            <v-btn icon slot="activator">
-              <v-icon>more_vert</v-icon>
-            </v-btn>
-            <v-list>
-              <v-list-tile v-for="item in items" :key="item.key">
-                <v-list-tile-action>
-                  <v-switch label="Dark theme" v-model="dark"></v-switch>
-                </v-list-tile-action>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
+        <v-flex sm10 md8 lg6 offset-sm1 offset-md2 offset-lg3 my-2>
+          <v-card class="elevation-1">
+            <v-layout>
+              <v-flex xs9 offset-xs1>
+                <search-bar :errorMessages="errorMessages" @addCity="addCity" />
+              </v-flex>
+              <v-flex xs2>
+                <v-menu transition="slide-x-reverse-transition" offset-y :close-on-content-click="false">
+                  <v-btn icon slot="activator" :left="$vuetify.breakpoint.mdAndUp">
+                    <v-icon>more_vert</v-icon>
+                  </v-btn>
+                  <v-list :dark="dark">
+                    <v-list-tile v-for="item in items" :key="item.key">
+                      <v-list-tile-action>
+                        <v-switch label="Dark theme" v-model="dark"></v-switch>
+                      </v-list-tile-action>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
+              </v-flex>
+            </v-layout>
+          </v-card>
         </v-flex>
         <v-flex sm10 md8 lg6 offset-sm1 offset-md2 offset-lg3>
           <city-list :cities="citiesWeather" :currentCity="currentCity" @updateCity="updateCity" @deleteCity="deleteCity" />

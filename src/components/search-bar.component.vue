@@ -1,7 +1,18 @@
 <template>
   <v-form @submit.prevent="addCity()" transition="slide-y-transition" origin="top center 100px">
-    <v-text-field :error-messages="errorMessages" label="What's the weather forecast for..." v-model="searchTerm" prepend-icon="search"></v-text-field>
-    <v-btn color="primary" type="submit">Search city</v-btn>
+    <v-layout row wrap>
+      <v-flex xs9>
+        <v-text-field :error-messages="errorMessages" label="What's the weather like in..." v-model="searchTerm"></v-text-field>
+      </v-flex>
+      <v-flex xs3 mt-2>
+        <div class="text-xs-left">
+          <v-btn color="primary" type="submit" :icon="$vuetify.breakpoint.smAndDown">
+            <span v-if="$vuetify.breakpoint.mdAndUp">Search</span>
+            <v-icon :right="$vuetify.breakpoint.mdAndUp">search</v-icon>
+          </v-btn>
+        </div>
+      </v-flex>
+    </v-layout>
   </v-form>
 </template>
 
