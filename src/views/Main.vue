@@ -4,13 +4,13 @@
       <v-layout row wrap>
         <v-flex sm10 md8 lg6 offset-sm1 offset-md2 offset-lg3 my-2>
           <v-card class="elevation-1">
-            <v-layout>
+            <v-layout row wrap>
               <v-flex xs9 offset-xs1>
                 <search-bar :errorMessages="errorMessages" @addCity="addCity" />
               </v-flex>
-              <v-flex xs2>
+              <v-flex xs2 mt-2>
                 <v-menu transition="slide-x-reverse-transition" offset-y :close-on-content-click="false">
-                  <v-btn icon slot="activator" :left="$vuetify.breakpoint.mdAndUp">
+                  <v-btn icon slot="activator" :right="$vuetify.breakpoint.xs" :left="$vuetify.breakpoint.mdAndUp">
                     <v-icon>more_vert</v-icon>
                   </v-btn>
                   <v-list :dark="dark">
@@ -153,12 +153,14 @@ export default class Main extends Vue {
     }
   }
 
-  deleteCity(city: CityWeatherModel) {
-    this.deleteCityMutation(city);
-    this.setCurrentCityMutation(
-      this.citiesWeather[this.citiesWeather.length - 1]
-        ? this.citiesWeather[this.citiesWeather.length - 1].name
-        : ''
+  deleteCity(index: number) {
+    this.deleteCityMutation(index);
+    this.$nextTick(() =>
+      this.setCurrentCityMutation(
+        this.citiesWeather[index - 1]
+          ? this.citiesWeather[index - 1].name
+          : this.citiesWeather[0] ? this.citiesWeather[0].name : ''
+      )
     );
   }
 

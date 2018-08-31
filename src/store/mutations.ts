@@ -25,9 +25,7 @@ export default {
   },
 
   [MUTATIONS.DELETE_CITY](state, payload) {
-    state.citiesWeather = state.citiesWeather.filter(
-      city => city.id !== payload.id
-    );
+    state.citiesWeather.splice(payload, 1);
     localStorage.setItem('cities', JSON.stringify(state.citiesWeather));
   },
 

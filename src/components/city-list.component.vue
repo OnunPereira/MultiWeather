@@ -6,7 +6,7 @@
           <v-card>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn flat small color="secondary" @click="deleteCity(city)">Delete</v-btn>
+              <v-btn flat small color="secondary" @click="deleteCity(city.name)">Delete</v-btn>
             </v-card-actions>
             <v-card-title primary-title>
               <v-flex xs12>
@@ -79,8 +79,11 @@ export default class CityList extends Vue {
     this.$emit('updateCity', city);
   }
 
-  deleteCity(city) {
-    this.$emit('deleteCity', city);
+  deleteCity(cityName) {
+    this.$emit(
+      'deleteCity',
+      this.cities.findIndex(city => city.name === cityName)
+    );
   }
 }
 </script>
