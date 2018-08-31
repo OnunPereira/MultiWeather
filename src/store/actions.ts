@@ -7,7 +7,7 @@ const weatherInfoService = new WeatherInfoService();
 
 export default {
   async [ACTIONS.GET_WEATHER](context, city) {
-    const response = await weatherInfoService.getWeather(city);
+    const response = await weatherInfoService.genericGet('weather')(city);
 
     if (response.cod === 200) {
       return {
@@ -21,7 +21,7 @@ export default {
   },
 
   async [ACTIONS.GET_FORECAST](context, city) {
-    const response = await weatherInfoService.getForecast(city);
+    const response = await weatherInfoService.genericGet('forecast')(city);
 
     if (response.cod === '200') {
       return {
