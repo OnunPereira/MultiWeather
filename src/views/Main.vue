@@ -149,7 +149,7 @@ export default class Main extends Vue {
         })
       });
     } catch (e) {
-      console.log(e);
+      // do nothing
     }
   }
 
