@@ -7,6 +7,7 @@ import colors from 'vuetify/es5/util/colors';
 import WeatherPlugin from './plugins/weather-plugin';
 import 'vuetify/dist/vuetify.min.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
+import './registerServiceWorker';
 
 Vue.config.productionTip = false;
 Vue.use(Vuetify, {
