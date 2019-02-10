@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.4.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.b38ae5e35743201b1793d1d633adae73.js"
+  "/precache-manifest.e6734b874d1ecf946f738bce39369ba9.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "multiweather"});
